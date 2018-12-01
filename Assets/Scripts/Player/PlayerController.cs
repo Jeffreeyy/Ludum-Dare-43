@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,15 +10,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_Direction;
 
     private Colors m_CurrentColor = Colors.White;
-    private Renderer m_Renderer;
+    [SerializeField] private Renderer m_Renderer;
     private int m_Score;
 
     private float m_ToggleCooldown;
 
     private void Awake()
     {
-        m_Renderer = gameObject.GetComponent<Renderer>();
         m_Direction = Vector3.left;
+        RotateCharacter();
 
         GameEvents.OnMapBoundHit += OnMapBoundHit;
     }
@@ -49,7 +50,19 @@ public class PlayerController : MonoBehaviour
     private void ToggleDirection()
     {
         if(m_ToggleCooldown <= 0)
+        {
             m_Direction = m_Direction == Vector3.left ? Vector3.right : Vector3.left;
+            RotateCharacter();
+        }
+    }
+
+    private void RotateCharacter()
+    {
+        float rotation = m_Direction == Vector3.left ? -45f : 45f;
+        transform.DOKill(false);
+        transform.DOLocalMoveY(0.5f, 0.1f);
+        transform.DOLocalMoveY(0, 0.1f).SetDelay(0.1f);
+        transform.DOLocalRotate(new Vector3(0f, rotation, 0f), 0.2f);
     }
 
     private void OnGUI()
@@ -84,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
         Material material = ColorLibrary.Instance.GetMaterial(newColor);
         if (material != null)
-            m_Renderer.material = material;
+            m_Renderer.material.color = material.color;
 
         m_CurrentColor = newColor;
         collidable.OnHit();
