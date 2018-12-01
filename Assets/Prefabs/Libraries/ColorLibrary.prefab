@@ -53,16 +53,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Colors:
   - color: 0
+    isBaseColor: 0
     material: {fileID: 2100000, guid: 870b43e46815d634089380393bbfc350, type: 2}
   - color: 1
+    isBaseColor: 1
     material: {fileID: 2100000, guid: e7cf1042567e43748ac0188172c86d64, type: 2}
   - color: 2
+    isBaseColor: 1
     material: {fileID: 2100000, guid: 8d28741ae61420743ade0fc47bdfaa8d, type: 2}
   - color: 3
+    isBaseColor: 1
     material: {fileID: 2100000, guid: 4558137ffe5775e46a79bdad0828c64f, type: 2}
   - color: 4
+    isBaseColor: 0
     material: {fileID: 2100000, guid: 72583eb6adee74549b5f0aff036dbf80, type: 2}
   - color: 5
+    isBaseColor: 0
     material: {fileID: 2100000, guid: a2dc142f42a02594abf336f5ed8216f7, type: 2}
   - color: 6
+    isBaseColor: 1
     material: {fileID: 2100000, guid: d516fb23f9645b9489a9213bea5b7030, type: 2}

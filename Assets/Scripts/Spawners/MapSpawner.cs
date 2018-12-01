@@ -27,13 +27,29 @@ public class MapSpawner : MonoBehaviour
 
         objective.SetData(library.GetColorItem(combination.output), CollidableType.Objective);
 
+        List<Colors> colorsToSpawn = library.GetColors(false);
+
         for (int i = 0; i < m_RightCombinationPickupCount; i++)
-        {
-            ColorPickup pickup = Instantiate(m_ColorPickupPrefab, gameObject.transform, false) as ColorPickup;
-            pickup.transform.position = GetRandomSpawnPosition();
-            m_ActivePickups.Add(pickup);
-            pickup.SetData(library.GetColorItem(i % 2 == 0 ? combination.color1 : combination.color2), CollidableType.Pickup);
-        }
+            CreatePickup(library.GetColorItem(i % 2 == 0 ? combination.color1 : combination.color2), CollidableType.Pickup);
+
+        colorsToSpawn.Remove(combination.color1);
+        colorsToSpawn.Remove(combination.color2);
+
+        int maxSpawnAmount = m_MaxPickupsInChunk;
+        maxSpawnAmount -= m_RightCombinationPickupCount;
+
+        for (int i = 0; i < maxSpawnAmount; i++)
+            CreatePickup(library.GetColorItem(colorsToSpawn[Random.Range(0, colorsToSpawn.Count)]), CollidableType.Pickup);
+
+        GameEvents.OnTargetColorCombinationUpdated(combination);
+    }
+
+    private void CreatePickup(ColorItem data, CollidableType type)
+    {
+        ColorPickup pickup = Instantiate(m_ColorPickupPrefab, gameObject.transform, false) as ColorPickup;
+        pickup.transform.position = GetRandomSpawnPosition();
+        m_ActivePickups.Add(pickup);
+        pickup.SetData(data, type);
     }
 
     private Vector3 GetRandomSpawnPosition()

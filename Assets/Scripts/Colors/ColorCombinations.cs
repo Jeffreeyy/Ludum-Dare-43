@@ -21,7 +21,9 @@ public class ColorCombinations
 {
     public static List<ColorCombination> Combinations = new List<ColorCombination>()
     {
-        new ColorCombination(Colors.Yellow, Colors.Red, Colors.Orange)
+        new ColorCombination(Colors.Yellow, Colors.Red, Colors.Orange),
+        new ColorCombination(Colors.Yellow, Colors.Blue, Colors.Green),
+        new ColorCombination(Colors.Red, Colors.Blue, Colors.Purple)
     };
 
     public static Colors GetCombinedColor(Colors color1, Colors color2)
@@ -35,7 +37,7 @@ public class ColorCombinations
                     return Combinations[i].output;
             }
 
-            throw new KeyNotFoundException("Combination does not exist");
+            throw new KeyNotFoundException("Combination does not exist. " + color1.ToString() + ", " + color2.ToString());
         }
         catch(Exception e)
         {

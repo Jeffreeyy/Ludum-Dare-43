@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,20 +12,43 @@ public class PlayerController : MonoBehaviour
     private Renderer m_Renderer;
     private int m_Score;
 
+    private float m_ToggleCooldown;
+
     private void Awake()
     {
         m_Renderer = gameObject.GetComponent<Renderer>();
         m_Direction = Vector3.left;
+
+        GameEvents.OnMapBoundHit += OnMapBoundHit;
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.OnMapBoundHit -= OnMapBoundHit;
+    }
+
+    private void OnMapBoundHit()
+    {
+        ToggleDirection();
+        m_ToggleCooldown = 0.2f;
     }
 
     void Update()
     {
+        if (m_ToggleCooldown > 0)
+            m_ToggleCooldown -= Time.deltaTime;
+
         // Toggle direction
-        if (Input.GetKeyDown(KeyCode.Space))
-            m_Direction = m_Direction == Vector3.left ? Vector3.right : Vector3.left;
+        if (Input.GetKeyDown(KeyCode.Space) && m_ToggleCooldown <= 0)
+            ToggleDirection();
 
         // Move player
         transform.position += new Vector3(m_Direction.x * m_MovementSpeed * Time.deltaTime, 0, m_MovementSpeed * Time.deltaTime);
+    }
+
+    private void ToggleDirection()
+    {
+        m_Direction = m_Direction == Vector3.left ? Vector3.right : Vector3.left;
     }
 
     private void OnGUI()
@@ -53,6 +77,10 @@ public class PlayerController : MonoBehaviour
 
         Colors newColor = m_CurrentColor == Colors.White ? collidable.Color : ColorCombinations.GetCombinedColor(m_CurrentColor, collidable.Color);
 
+        // Only happens if we already have a combination
+        if (newColor == Colors.White)
+            newColor = collidable.Color;
+
         Material material = ColorLibrary.Instance.GetMaterial(newColor);
         if (material != null)
             m_Renderer.material = material;
@@ -68,7 +96,10 @@ public class PlayerController : MonoBehaviour
         print(objectiveColor.ToString() + " | " + m_CurrentColor.ToString());
 
         if (m_CurrentColor == objectiveColor)
+        {
             m_Score++;
+            GameEvents.OnScoreUpdated(m_Score);
+        }
         else
             m_MovementSpeed = 0;
     }
