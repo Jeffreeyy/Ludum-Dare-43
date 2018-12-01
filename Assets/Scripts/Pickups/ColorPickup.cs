@@ -5,16 +5,23 @@ using UnityEngine;
 public class ColorPickup : MonoBehaviour, ICollidable
 {
 
-    [SerializeField] private ColorItem m_Data;
+    private ColorItem m_Data;
     private Renderer m_Renderer;
 
     public CollidableType Type { get; set; }
+    public Colors Color { get { return m_Data.color; } }
 
-    private void Start()
+    public void SetData(ColorItem data, CollidableType type)
+    {
+        m_Data = data;
+        Type = type;
+
+        UpdateColor();
+    }
+
+    private void Awake()
     {
         m_Renderer = gameObject.GetComponent<Renderer>();
-        Type = CollidableType.Pickup;
-        UpdateColor();
     }
 
     private void UpdateColor()
@@ -25,10 +32,5 @@ public class ColorPickup : MonoBehaviour, ICollidable
     public void OnHit()
     {
         m_Renderer.material = ColorLibrary.Instance.GetMaterial(Colors.White);
-    }
-
-    public Colors GetColor()
-    {
-        return m_Data.color;
     }
 }
