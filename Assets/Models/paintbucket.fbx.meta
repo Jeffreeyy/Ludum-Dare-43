@@ -6,16 +6,29 @@ ModelImporter:
     100000: //RootNode
     100002: polySurface1
     100004: polySurface2
+    100006: bucket_bucket
+    100008: bucket_handle
     400000: //RootNode
     400002: polySurface1
     400004: polySurface2
+    400006: bucket_bucket
+    400008: bucket_handle
     2100000: lambert2
     2300000: polySurface1
     2300002: polySurface2
+    2300004: bucket_bucket
+    2300006: bucket_handle
+    2300008: //RootNode
     3300000: polySurface1
     3300002: polySurface2
+    3300004: bucket_bucket
+    3300006: bucket_handle
+    3300008: //RootNode
     4300000: polySurface1
     4300002: polySurface2
+    4300004: bucket_paint
+    4300006: bucket_handle
+    4300008: bucket_bucket
   externalObjects: {}
   materials:
     importMaterials: 0
