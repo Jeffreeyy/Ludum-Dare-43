@@ -1,12 +1,14 @@
 ﻿public enum CollidableType
 {
     Pickup,
-    Objective
+    Objective,
+    Bound
 }
 
 public interface ICollidable
 {
     CollidableType Type { get; set; }
-    Colors GetColor();
+    Colors Color { get; }
+    void SetData(ColorItem data, CollidableType type);
     void OnHit();
 }
