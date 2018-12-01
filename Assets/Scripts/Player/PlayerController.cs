@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 
     private Colors m_CurrentColor = Colors.White;
 
+    private int m_Score;
+
     private void Start()
     {
         m_Direction = Vector3.left;
@@ -24,19 +26,47 @@ public class PlayerController : MonoBehaviour
         transform.position += new Vector3(m_Direction.x * m_MovementSpeed * Time.deltaTime, 0, m_MovementSpeed * Time.deltaTime);
     }
 
+    private void OnGUI()
+    {
+        // TEMP!!!
+        GUILayout.Label("Score: " + m_Score + " | Color: " + m_CurrentColor.ToString());
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        ColorPickup pickup = other.gameObject.GetComponent<ColorPickup>();
-        if (pickup != null)
+        ICollidable collidable = other.gameObject.GetComponent<ICollidable>();
+
+        if (collidable != null)
         {
-            Colors newColor = m_CurrentColor == Colors.White ? pickup.GetColor() : ColorCombinations.GetCombinedColor(m_CurrentColor, pickup.GetColor());
-
-            Material material = ColorLibrary.Instance.GetMaterial(newColor);
-            if (material != null)
-                gameObject.GetComponent<Renderer>().material = material;
-
-            m_CurrentColor = pickup.GetColor();
-            pickup.OnPickup();
+            switch (collidable.Type)
+            {
+                case CollidableType.Pickup:     HandlePickupHit(collidable);    break;
+                case CollidableType.Objective:  HandleObjectiveHit(collidable); break;
+            }
         }
+    }
+
+    private void HandlePickupHit(ICollidable collidable)
+    {
+        Colors newColor = m_CurrentColor == Colors.White ? collidable.GetColor() : ColorCombinations.GetCombinedColor(m_CurrentColor, collidable.GetColor());
+
+        Material material = ColorLibrary.Instance.GetMaterial(newColor);
+        if (material != null)
+            gameObject.GetComponent<Renderer>().material = material;
+
+        m_CurrentColor = newColor;
+        collidable.OnHit();
+    }
+
+    private void HandleObjectiveHit(ICollidable collidable)
+    {
+        Colors objectiveColor = collidable.GetColor();
+
+        print(objectiveColor.ToString() + " | " + m_CurrentColor.ToString());
+
+        if (m_CurrentColor == objectiveColor)
+            m_Score++;
+        else
+            m_MovementSpeed = 0;
     }
 }
