@@ -1,49 +1,16 @@
 fileFormatVersion: 2
-guid: 3574df4de6b4d2a4bad57b899eae1d70
+guid: 7c99ef469ff286b4eba1dffb956c7ca5
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: grass2
-    100002: grass_1:grass_1
-    100004: //RootNode
-    100006: polySurface2
-    100008: polySurface25
-    100010: polySurface33
-    100012: polySurface42
-    100014: polySurface51
-    100016: polySurface9
-    100018: transform1
-    100020: transform33
-    100022: transform34
-    100024: transform35
-    100026: transform36
-    100028: transform37
-    100030: transform38
-    400000: grass2
-    400002: grass_1:grass_1
-    400004: //RootNode
-    400006: polySurface2
-    400008: polySurface25
-    400010: polySurface33
-    400012: polySurface42
-    400014: polySurface51
-    400016: polySurface9
-    400018: transform1
-    400020: transform33
-    400022: transform34
-    400024: transform35
-    400026: transform36
-    400028: transform37
-    400030: transform38
-    2100000: grass_1_palette1
-    2300000: grass2
-    2300002: //RootNode
-    3300000: grass2
-    3300002: //RootNode
-    4300000: grass2
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: moleshill_6:moleshill_6
   externalObjects: {}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
