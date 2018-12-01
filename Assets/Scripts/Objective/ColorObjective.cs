@@ -4,24 +4,16 @@ using UnityEngine;
 
 public class ColorObjective : MonoBehaviour, ICollidable
 {
-    private ColorItem m_Data;
+    [SerializeField] private ColorItem m_Data;
     private Renderer m_Renderer;
 
     public CollidableType Type { get; set; }
 
-    public Colors Color { get { return m_Data.color; } }
-
-    public void SetData(ColorItem data, CollidableType type)
-    {
-        m_Data = data;
-        Type = type;
-
-        UpdateColor();
-    }
-
-    private void Awake()
+    private void Start()
     {
         m_Renderer = gameObject.GetComponent<Renderer>();
+        Type = CollidableType.Objective;
+        UpdateColor();
     }
 
     private void UpdateColor()
@@ -32,5 +24,10 @@ public class ColorObjective : MonoBehaviour, ICollidable
     public void OnHit()
     {
 
+    }
+
+    public Colors GetColor()
+    {
+        return m_Data.color;
     }
 }
