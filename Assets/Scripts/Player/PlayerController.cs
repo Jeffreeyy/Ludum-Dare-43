@@ -8,11 +8,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_Direction;
 
     private Colors m_CurrentColor = Colors.White;
-
+    private Renderer m_Renderer;
     private int m_Score;
 
-    private void Start()
+    private void Awake()
     {
+        m_Renderer = gameObject.GetComponent<Renderer>();
         m_Direction = Vector3.left;
     }
 
@@ -48,11 +49,13 @@ public class PlayerController : MonoBehaviour
 
     private void HandlePickupHit(ICollidable collidable)
     {
-        Colors newColor = m_CurrentColor == Colors.White ? collidable.GetColor() : ColorCombinations.GetCombinedColor(m_CurrentColor, collidable.GetColor());
+        if (m_CurrentColor == collidable.Color) return;
+
+        Colors newColor = m_CurrentColor == Colors.White ? collidable.Color : ColorCombinations.GetCombinedColor(m_CurrentColor, collidable.Color);
 
         Material material = ColorLibrary.Instance.GetMaterial(newColor);
         if (material != null)
-            gameObject.GetComponent<Renderer>().material = material;
+            m_Renderer.material = material;
 
         m_CurrentColor = newColor;
         collidable.OnHit();
@@ -60,7 +63,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleObjectiveHit(ICollidable collidable)
     {
-        Colors objectiveColor = collidable.GetColor();
+        Colors objectiveColor = collidable.Color;
 
         print(objectiveColor.ToString() + " | " + m_CurrentColor.ToString());
 
