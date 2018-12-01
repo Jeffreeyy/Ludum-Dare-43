@@ -646,6 +646,7 @@ GameObject:
   - component: {fileID: 1870197334}
   - component: {fileID: 1870197333}
   - component: {fileID: 1870197332}
+  - component: {fileID: 1870197336}
   m_Layer: 0
   m_Name: Bounds
   m_TagString: Untagged
@@ -660,7 +661,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1870197331}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -720,6 +721,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1870197336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1870197331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7123a569127a674d9da7e4417ed2982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2081775164
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,6 +743,7 @@ GameObject:
   - component: {fileID: 2081775167}
   - component: {fileID: 2081775166}
   - component: {fileID: 2081775165}
+  - component: {fileID: 2081775169}
   m_Layer: 0
   m_Name: Bounds
   m_TagString: Untagged
@@ -745,7 +758,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2081775164}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -805,3 +818,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2081775169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2081775164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7123a569127a674d9da7e4417ed2982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
