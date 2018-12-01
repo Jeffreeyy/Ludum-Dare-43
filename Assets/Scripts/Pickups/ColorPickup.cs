@@ -6,7 +6,7 @@ public class ColorPickup : MonoBehaviour, ICollidable
 {
 
     private ColorItem m_Data;
-    private Renderer m_Renderer;
+    [SerializeField] private Renderer m_Renderer;
 
     public CollidableType Type { get; set; }
     public Colors Color { get { return m_Data.color; } }
@@ -19,11 +19,6 @@ public class ColorPickup : MonoBehaviour, ICollidable
         UpdateColor();
     }
 
-    private void Awake()
-    {
-        m_Renderer = gameObject.GetComponent<Renderer>();
-    }
-
     private void UpdateColor()
     {
         m_Renderer.material = m_Data.material;
@@ -31,6 +26,6 @@ public class ColorPickup : MonoBehaviour, ICollidable
 
     public void OnHit()
     {
-        m_Renderer.material = ColorLibrary.Instance.GetMaterial(Colors.White);
+        m_Renderer.enabled = false;//material = ColorLibrary.Instance.GetMaterial(Colors.White);
     }
 }
