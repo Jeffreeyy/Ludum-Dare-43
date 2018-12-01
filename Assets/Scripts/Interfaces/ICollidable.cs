@@ -1,8 +1,7 @@
 ﻿public enum CollidableType
 {
     Pickup,
-    Objective,
-    Bound
+    Objective
 }
 
 public interface ICollidable

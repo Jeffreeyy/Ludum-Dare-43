@@ -77,6 +77,10 @@ public class PlayerController : MonoBehaviour
 
         Colors newColor = m_CurrentColor == Colors.White ? collidable.Color : ColorCombinations.GetCombinedColor(m_CurrentColor, collidable.Color);
 
+        // Only happens if we already have a combination
+        if (newColor == Colors.White)
+            newColor = collidable.Color;
+
         Material material = ColorLibrary.Instance.GetMaterial(newColor);
         if (material != null)
             m_Renderer.material = material;
@@ -92,7 +96,10 @@ public class PlayerController : MonoBehaviour
         print(objectiveColor.ToString() + " | " + m_CurrentColor.ToString());
 
         if (m_CurrentColor == objectiveColor)
+        {
             m_Score++;
+            GameEvents.OnScoreUpdated(m_Score);
+        }
         else
             m_MovementSpeed = 0;
     }

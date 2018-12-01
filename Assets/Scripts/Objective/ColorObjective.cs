@@ -31,6 +31,7 @@ public class ColorObjective : MonoBehaviour, ICollidable
 
     public void OnHit()
     {
+        // fireworks ?? idk
 
     }
 }

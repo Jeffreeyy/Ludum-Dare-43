@@ -17,6 +17,7 @@ public enum Colors
 public class ColorItem
 {
     public Colors color;
+    public bool isBaseColor;
     public Material material;
 }
 
@@ -70,14 +71,24 @@ public class ColorLibrary : MonoBehaviour
         }
     }
 
-    public List<Colors> GetColors()
+    public List<Colors> GetColors(bool includeNonBaseColors)
     {
         try
         {
             List<Colors> temp = new List<Colors>();
 
             for (int i = 0; i < m_Colors.Count; i++)
-                temp.Add(m_Colors[i].color);
+            {
+                if (!m_Colors[i].isBaseColor)
+                {
+                    if (!includeNonBaseColors)
+                        continue;
+                }
+
+                if(m_Colors[i].color != Colors.White)
+                    temp.Add(m_Colors[i].color);
+            }
+
 
             if (temp.Count > 0)
                 return temp;
