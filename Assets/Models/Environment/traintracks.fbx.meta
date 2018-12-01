@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: eb6ac2d98d513cb4c921a4ef7afc84b9
+guid: 698a29bb5a100654691fd81a7964e4ea
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -7,9 +7,8 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: watertile_12:watertile_12
-    4300002: watertileerino_15:watertileerino_15
-    4300004: watertileerino_12:watertileerino_12
+    4300000: traintracks_15:traintracks_15
+    4300002: traintracks_16:traintracks_15
   externalObjects: {}
   materials:
     importMaterials: 0

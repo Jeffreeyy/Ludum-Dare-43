@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: eb6ac2d98d513cb4c921a4ef7afc84b9
+guid: 78b6e498c1d1749499acc5c172ab0f6a
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -7,9 +7,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: watertile_12:watertile_12
-    4300002: watertileerino_15:watertileerino_15
-    4300004: watertileerino_12:watertileerino_12
+    4300000: watertileerino_13:watertileerino_13
   externalObjects: {}
   materials:
     importMaterials: 0
