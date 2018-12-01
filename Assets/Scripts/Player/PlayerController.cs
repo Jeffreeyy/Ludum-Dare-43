@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
             m_ToggleCooldown -= Time.deltaTime;
 
         // Toggle direction
-        if (Input.GetKeyDown(KeyCode.Space) && m_ToggleCooldown <= 0)
+        if (Input.GetKeyDown(KeyCode.Space))
             ToggleDirection();
 
         // Move player
@@ -48,7 +48,8 @@ public class PlayerController : MonoBehaviour
 
     private void ToggleDirection()
     {
-        m_Direction = m_Direction == Vector3.left ? Vector3.right : Vector3.left;
+        if(m_ToggleCooldown <= 0)
+            m_Direction = m_Direction == Vector3.left ? Vector3.right : Vector3.left;
     }
 
     private void OnGUI()

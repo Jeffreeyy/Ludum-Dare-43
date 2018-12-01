@@ -6,11 +6,17 @@ public class MapBound : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (GameEvents.OnMapBoundHit != null) GameEvents.OnMapBoundHit();
+        if(other.tag == "Player")
+        {
+            if (GameEvents.OnMapBoundHit != null) GameEvents.OnMapBoundHit();
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (GameEvents.OnMapBoundLeave != null) GameEvents.OnMapBoundLeave();
+        if (other.tag == "Player")
+        {
+            if (GameEvents.OnMapBoundLeave != null) GameEvents.OnMapBoundLeave();
+        }
     }
 }
