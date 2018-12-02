@@ -70,7 +70,15 @@ public class PlayerController : MonoBehaviour
         transform.DOKill(false);
         if (animated)
         {
-            transform.DOLocalMoveY(0.5f, 0.1f);
+            // Scaling
+            transform.DOScaleY(1.3f, 0.1f);
+            transform.DOScaleY(1f, 0.1f).SetDelay(0.1f);
+            transform.DOScaleY(0.75f, 0.1f).SetDelay(0.2f);
+            transform.DOScaleY(1f, 0.1f).SetDelay(0.3f);
+
+
+            // Jumping
+            transform.DOLocalMoveY(0.66f, 0.1f);
             transform.DOLocalMoveY(0, 0.1f).SetDelay(0.1f);
         }
 

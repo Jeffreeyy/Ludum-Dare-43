@@ -39,6 +39,9 @@ public class TargetColor : MonoBehaviour
                 targetColor = combination.output;
                 break;
         }
-        m_Image.color = ColorLibrary.Instance.GetColorItem(targetColor).material.color;
+
+        Color color = ColorLibrary.Instance.GetColorItem(targetColor).material.color;
+        color = new Color(color.r, color.g, color.b, 1);
+        m_Image.color = color;
     }
 }
