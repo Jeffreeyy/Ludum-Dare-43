@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator RandomBirdSpawning()
     {
-        yield return new WaitForSeconds(UnityEngine.Random.Range(30f, 60f));
+        yield return new WaitForSeconds(UnityEngine.Random.Range(15f, 30f));
         BirdManager.Instance.SpawnBird(transform.position.z);
         StartCoroutine(RandomBirdSpawning());
     }

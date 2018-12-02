@@ -26,7 +26,9 @@ public class ColorObjective : MonoBehaviour, ICollidable
 
     private void UpdateColor()
     {
-        m_Renderer.material.color = m_Data.material.color;
+        Color color = m_Data.material.color;
+        m_Renderer.material.color = new Color(color.r, color.g, color.b, 0.4f);
+        m_Renderer.material.SetColor("_EmissionColor", m_Data.material.color);
     }
 
     public void OnHit()
