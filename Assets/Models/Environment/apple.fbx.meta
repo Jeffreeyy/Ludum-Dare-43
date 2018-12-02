@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 78b6e498c1d1749499acc5c172ab0f6a
+guid: 813f676451adef943a8fc8e6403a440e
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -7,8 +7,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: watertileerino_13:watertileerino_13
-    4300002: bridge
+    4300000: apple
   externalObjects: {}
   materials:
     importMaterials: 0

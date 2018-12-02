@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 78b6e498c1d1749499acc5c172ab0f6a
+guid: 560e33b447ab99c47b8008546b917f9a
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -7,8 +7,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: watertileerino_13:watertileerino_13
-    4300002: bridge
+    4300000: road_single
   externalObjects: {}
   materials:
     importMaterials: 0

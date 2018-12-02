@@ -9,6 +9,7 @@ ModelImporter:
     3300000: //RootNode
     4300000: car_8:car_8
     4300002: car_9:car_8
+    4300004: car
   externalObjects: {}
   materials:
     importMaterials: 0
