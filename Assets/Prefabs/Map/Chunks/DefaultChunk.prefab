@@ -15933,7 +15933,7 @@ Transform:
   m_GameObject: {fileID: 1931251287826046}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 5, z: 25}
-  m_LocalScale: {x: 50, y: 10, z: 0}
+  m_LocalScale: {x: 50, y: 10, z: 0.075706}
   m_Children: []
   m_Father: {fileID: 4143976648696100}
   m_RootOrder: 0
@@ -42211,6 +42211,7 @@ MonoBehaviour:
   m_MaxSpawnAmount: 22
   m_Percentage: 70
   m_MinimumSpacingBetweenPickups: 2
+  m_Additives: []
 --- !u!114 &114561161308644858
 MonoBehaviour:
   m_ObjectHideFlags: 1
