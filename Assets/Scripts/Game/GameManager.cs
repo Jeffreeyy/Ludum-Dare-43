@@ -36,5 +36,4 @@ public class GameManager : MonoBehaviour
     {
         if (GameEvents.OnGameOver != null) GameEvents.OnGameOver(m_Score);
     }
-    
 }

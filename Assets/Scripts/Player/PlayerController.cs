@@ -23,12 +23,16 @@ public class PlayerController : MonoBehaviour
 
         GameEvents.OnGameStart += OnGameStart;
         GameEvents.OnMapBoundHit += OnMapBoundHit;
+
+        StartCoroutine(RandomBirdSpawning());
     }
 
     private void OnDestroy()
     {
         GameEvents.OnGameStart -= OnGameStart;
         GameEvents.OnMapBoundHit -= OnMapBoundHit;
+
+        StopCoroutine(RandomBirdSpawning());
     }
 
     private void OnGameStart()
@@ -111,7 +115,7 @@ public class PlayerController : MonoBehaviour
 
         Material material = ColorLibrary.Instance.GetMaterial(newColor);
         if (material != null)
-            m_Renderer.material.color = material.color;
+            SetMaterialColor(material.color, true);
 
         m_CurrentColor = newColor;
         collidable.OnHit();
@@ -141,6 +145,24 @@ public class PlayerController : MonoBehaviour
     private void ResetColor()
     {
         m_CurrentColor = Colors.White;
-        m_Renderer.material.color = ColorLibrary.Instance.GetMaterial(m_CurrentColor).color;
+        SetMaterialColor(ColorLibrary.Instance.GetMaterial(m_CurrentColor).color, true);
+    }
+
+    private void SetMaterialColor(Color color, bool animate)
+    {
+        m_Renderer.material.DOKill();
+
+        if (animate)
+            m_Renderer.material.DOColor(color, 0.33f).SetEase(Ease.InOutSine);
+        else
+            m_Renderer.material.color = color;
+    }
+
+
+    private IEnumerator RandomBirdSpawning()
+    {
+        yield return new WaitForSeconds(UnityEngine.Random.Range(30f, 60f));
+        BirdManager.Instance.SpawnBird(transform.position.z);
+        StartCoroutine(RandomBirdSpawning());
     }
 }
