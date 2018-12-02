@@ -13,31 +13,37 @@ public class Chunk : MonoBehaviour
     [Header("Right combination spawn percentage")]
     [Range(0, 100)]
     [SerializeField] private float m_Percentage = 70f;
-    [SerializeField] private float m_MinimumSpacingBetweenPickups = 0.5f;
+    [SerializeField] private float m_MinimumSpacingBetweenPickups = 2f;
+
+    public bool InUse { get; set; }
+
+    public ColorCombination ColorCombination;
 
     private const string PICKUP_IDENTIFIER = "Pickups";
 
     private Pool m_PickupPool;
+    private List<ColorPickup> m_SpawnedPickups = new List<ColorPickup>();
 
-    private void Start()
+    private void Awake()
     {
-        m_PickupPool = ObjectPool.Instance.CreatePool(m_ColorPickupPrefab.gameObject, 36, PICKUP_IDENTIFIER);
-        CreatePickups();
+        m_PickupPool = ObjectPool.Instance.CreatePool(m_ColorPickupPrefab.gameObject, 25, PICKUP_IDENTIFIER);
     }
 
-    private void CreatePickups()
+    public void CreatePickups()
     {
         // Make sure that the reference to the ColorLibrary Instance is there
         if (ColorLibrary.Instance == null) return;
+
+        // Get a random color combination
+        ColorCombination = ColorCombinations.GetRandomCombination();
 
         // Create holder
         GameObject pickupHolder = new GameObject(PICKUP_IDENTIFIER);
         pickupHolder.transform.SetParent(transform);
 
-        // Get random color combination
-        ColorCombination combination = ColorCombinations.GetRandomCombination();
         // Set the objective data for this chunk
-        m_Objective.SetData(ColorLibrary.Instance.GetColorItem(combination.output), CollidableType.Objective);
+        m_Objective.SetData(ColorLibrary.Instance.GetColorItem(ColorCombination.output), CollidableType.Objective);
+        m_Objective.ChunkParent = this;
 
         // Get a list of colors that can be spawned
         List<Colors> colorsToSpawn = ColorLibrary.Instance.GetColors(false);
@@ -52,32 +58,20 @@ public class Chunk : MonoBehaviour
         ShuffleTiles();
 
         // Spawn the right combination pickups
-        for (int i = 0; i < m_Tiles.Count; i++)
-        {
-            if (rightCombinationSpawnAmount <= 0) break;
-
-            ColorPickup pickup = CreatePickup(ColorLibrary.Instance.GetColorItem(i % 2 == 0 ? combination.color1 : combination.color2), CollidableType.Pickup, pickupHolder.transform);
-            pickup.transform.position = GetRandomSpawnPosition(m_Tiles[i]);
-
-            rightCombinationSpawnAmount--;
-        }
+        SpawnCorrectCombinationPickups(ColorCombination, rightCombinationSpawnAmount, pickupHolder.transform);
 
         // Remove the combination colors
-        colorsToSpawn.Remove(combination.color1);
-        colorsToSpawn.Remove(combination.color2);
+        colorsToSpawn.Remove(ColorCombination.color1);
+        colorsToSpawn.Remove(ColorCombination.color2);
 
         // Spawn the rest of the pickups
-        for (int i = 0; i < m_Tiles.Count; i++)
-        {
-            if (spawnAmount <= 0) break;
+        SpawnOtherPickups(ColorCombination, spawnAmount, colorsToSpawn, pickupHolder.transform);
+    }
 
-            ColorPickup pickup = CreatePickup(ColorLibrary.Instance.GetColorItem(colorsToSpawn[Random.Range(0, colorsToSpawn.Count)]), CollidableType.Pickup, pickupHolder.transform);
-            pickup.transform.position = GetRandomSpawnPosition(m_Tiles[i]);
-
-            spawnAmount--;
-        }
-        // TEMP
-        GameEvents.OnTargetColorCombinationUpdated(combination);
+    public void ClearPickups()
+    {
+        for (int i = 0; i < m_SpawnedPickups.Count; i++)
+            m_PickupPool.Despawn(m_SpawnedPickups[i].gameObject);
     }
 
     private ColorPickup CreatePickup(ColorItem data, CollidableType type, Transform parent)
@@ -85,6 +79,7 @@ public class Chunk : MonoBehaviour
         ColorPickup pickup = m_PickupPool.Get().GetComponent<ColorPickup>();
         pickup.transform.SetParent(parent);
         pickup.SetData(data, type);
+        m_SpawnedPickups.Add(pickup);
 
         return pickup;
     }
@@ -92,14 +87,14 @@ public class Chunk : MonoBehaviour
     private Vector3 GetRandomSpawnPosition(Tile tile)
     {
         Vector3 pos = new Vector3(Random.Range(-3.5f, 3.5f), 0, Random.Range(-3.5f, 3.5f));
+        Vector3 calculatedWorldPos = tile.transform.position + pos;
 
-        for (int i = 0; i < tile.Pickups.Count; i++)
+        for (int i = 0; i < m_SpawnedPickups.Count; i++)
         {
-            if (Vector3.Distance(pos, tile.Pickups[i].transform.position) < m_MinimumSpacingBetweenPickups)
+            if (Vector3.Distance(calculatedWorldPos, m_SpawnedPickups[i].transform.position) < m_MinimumSpacingBetweenPickups)
                 return GetRandomSpawnPosition(tile);
         }
 
-        Vector3 calculatedWorldPos = tile.transform.position + pos;
         return calculatedWorldPos;
     }
 
@@ -115,5 +110,37 @@ public class Chunk : MonoBehaviour
             m_Tiles[k] = m_Tiles[n];
             m_Tiles[n] = value;
         }
+    }
+
+    private void SpawnCorrectCombinationPickups(ColorCombination combination, int rightCombinationSpawnAmount, Transform pickupHolder)
+    {
+        for (int i = 0; i < m_Tiles.Count; i++)
+        {
+            if (rightCombinationSpawnAmount <= 0) break;
+
+            ColorPickup pickup = CreatePickup(ColorLibrary.Instance.GetColorItem(i % 2 == 0 ? combination.color1 : combination.color2), CollidableType.Pickup, pickupHolder);
+            pickup.transform.position = GetRandomSpawnPosition(m_Tiles[i]);
+
+            rightCombinationSpawnAmount--;
+        }
+
+        if (rightCombinationSpawnAmount > 0)
+            SpawnCorrectCombinationPickups(combination, rightCombinationSpawnAmount, pickupHolder);
+    }
+
+    private void SpawnOtherPickups(ColorCombination combination, int spawnAmount, List<Colors> colorsToSpawn, Transform pickupHolder)
+    {
+        for (int i = 0; i < m_Tiles.Count; i++)
+        {
+            if (spawnAmount <= 0) break;
+
+            ColorPickup pickup = CreatePickup(ColorLibrary.Instance.GetColorItem(colorsToSpawn[Random.Range(0, colorsToSpawn.Count)]), CollidableType.Pickup, pickupHolder);
+            pickup.transform.position = GetRandomSpawnPosition(m_Tiles[i]);
+
+            spawnAmount--;
+        }
+
+        if (spawnAmount > 0)
+            SpawnOtherPickups(combination, spawnAmount, colorsToSpawn, pickupHolder);
     }
 }

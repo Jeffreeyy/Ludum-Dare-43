@@ -29,6 +29,8 @@ public class ObjectPool : MonoBehaviour
             Pool pool = newPoolObj.GetComponent<Pool>();
 
             pool.Initialize(obj, amountToPreSpawn);
+            m_ObjectPools.Add(uniqueIdentifier, pool);
+
             return pool;
         }
         catch(Exception e)

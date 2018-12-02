@@ -6,7 +6,8 @@ using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float m_MovementSpeed = 5f;
+    [SerializeField] private float m_BaseMovementSpeed = 5f;
+    private float m_MovementSpeed = 0;
     private Vector3 m_Direction;
 
     private Colors m_CurrentColor = Colors.White;
@@ -20,12 +21,19 @@ public class PlayerController : MonoBehaviour
         m_Direction = Vector3.left;
         RotateCharacter();
 
+        GameEvents.OnGameStart += OnGameStart;
         GameEvents.OnMapBoundHit += OnMapBoundHit;
     }
 
     private void OnDestroy()
     {
+        GameEvents.OnGameStart -= OnGameStart;
         GameEvents.OnMapBoundHit -= OnMapBoundHit;
+    }
+
+    private void OnGameStart()
+    {
+        m_MovementSpeed = m_BaseMovementSpeed;
     }
 
     private void OnMapBoundHit()
@@ -112,6 +120,7 @@ public class PlayerController : MonoBehaviour
         if (m_CurrentColor == objectiveColor)
         {
             m_Score++;
+            collidable.OnHit();
             GameEvents.OnScoreUpdated(m_Score);
         }
         else

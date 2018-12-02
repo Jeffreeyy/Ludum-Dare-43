@@ -45,7 +45,7 @@ public class Pool : MonoBehaviour
     {
         for (int i = 0; i < m_Objects.Count; i++)
         {
-            if(m_Objects[i].obj == obj)
+            if (m_Objects[i].obj == obj)
             {
                 m_Objects[i].inUse = false;
                 m_Objects[i].obj.transform.SetParent(transform);

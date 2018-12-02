@@ -11,6 +11,8 @@ public class ColorObjective : MonoBehaviour, ICollidable
 
     public Colors Color { get { return m_Data.color; } }
 
+    public Chunk ChunkParent { get; set; }
+
     public void SetData(ColorItem data, CollidableType type)
     {
         m_Data = data;
@@ -32,6 +34,6 @@ public class ColorObjective : MonoBehaviour, ICollidable
     public void OnHit()
     {
         // fireworks ?? idk
-
+        if (GameEvents.OnObjectiveHit != null) GameEvents.OnObjectiveHit(ChunkParent);
     }
 }
