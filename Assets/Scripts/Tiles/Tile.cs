@@ -16,9 +16,6 @@ public class Tile : MonoBehaviour
     private BoxCollider m_Collider;
     private MapBound m_MapBound;
 
-    private List<ColorPickup> m_Pickups = new List<ColorPickup>();
-    public List<ColorPickup> Pickups { get { return m_Pickups; } set { m_Pickups = value; } }
-
     public void Generate()
     {
         if (m_Trees)

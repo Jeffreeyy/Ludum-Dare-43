@@ -302,6 +302,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Handle: {fileID: 4713721048853626}
   m_ToColor: {fileID: 23206008322889102}
+  m_AnimateHandle: 1
+  m_AnimateScale: 1
+  m_AnimatePosition: 1
 --- !u!135 &135391556408577212
 SphereCollider:
   m_ObjectHideFlags: 1

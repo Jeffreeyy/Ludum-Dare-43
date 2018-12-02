@@ -28,22 +28,13 @@ public class ColorCombinations
 
     public static Colors GetCombinedColor(Colors color1, Colors color2)
     {
-        try
+        for (int i = 0; i < Combinations.Count; i++)
         {
-            for (int i = 0; i < Combinations.Count; i++)
-            {
-                if (Combinations[i].color1 == color1 && Combinations[i].color2 == color2 || 
-                    Combinations[i].color1 == color2 && Combinations[i].color2 == color1)
-                    return Combinations[i].output;
-            }
-
-            throw new KeyNotFoundException("Combination does not exist. " + color1.ToString() + ", " + color2.ToString());
+            if (Combinations[i].color1 == color1 && Combinations[i].color2 == color2 || 
+                Combinations[i].color1 == color2 && Combinations[i].color2 == color1)
+                return Combinations[i].output;
         }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-            return Colors.White;
-        }
+        return Colors.White;
     }
 
     public static ColorCombination GetRandomCombination()
