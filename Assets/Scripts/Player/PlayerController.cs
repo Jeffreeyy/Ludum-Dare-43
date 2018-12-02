@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         m_Direction = Vector3.left;
-        RotateCharacter();
+        RotateCharacter(false);
 
         GameEvents.OnGameStart += OnGameStart;
         GameEvents.OnMapBoundHit += OnMapBoundHit;
@@ -60,23 +60,21 @@ public class PlayerController : MonoBehaviour
         if(m_ToggleCooldown <= 0)
         {
             m_Direction = m_Direction == Vector3.left ? Vector3.right : Vector3.left;
-            RotateCharacter();
+            RotateCharacter(true);
         }
     }
 
-    private void RotateCharacter()
+    private void RotateCharacter(bool animated)
     {
         float rotation = m_Direction == Vector3.left ? -45f : 45f;
         transform.DOKill(false);
-        transform.DOLocalMoveY(0.5f, 0.1f);
-        transform.DOLocalMoveY(0, 0.1f).SetDelay(0.1f);
-        transform.DOLocalRotate(new Vector3(0f, rotation, 0f), 0.2f);
-    }
+        if (animated)
+        {
+            transform.DOLocalMoveY(0.5f, 0.1f);
+            transform.DOLocalMoveY(0, 0.1f).SetDelay(0.1f);
+        }
 
-    private void OnGUI()
-    {
-        // TEMP!!!
-        GUILayout.Label("Score: " + m_Score + " | Color: " + m_CurrentColor.ToString());
+        transform.DOLocalRotate(new Vector3(0f, rotation, 0f), animated ? 0.2f : 0);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -113,17 +111,28 @@ public class PlayerController : MonoBehaviour
 
     private void HandleObjectiveHit(ICollidable collidable)
     {
-        Colors objectiveColor = collidable.Color;
-
-        print(objectiveColor.ToString() + " | " + m_CurrentColor.ToString());
-
-        if (m_CurrentColor == objectiveColor)
+        if (m_CurrentColor == collidable.Color)
         {
-            m_Score++;
+            // Update score
+            GameManager.Instance.Score++;
+
+            // Call the on hit
             collidable.OnHit();
-            GameEvents.OnScoreUpdated(m_Score);
+
+            // Reset the player back to white
+            ResetColor();
         }
         else
+        {
             m_MovementSpeed = 0;
+            if(GameEvents.OnGameOver != null) GameEvents.OnGameOver(m_Score);
+        }
+
+    }
+
+    private void ResetColor()
+    {
+        m_CurrentColor = Colors.White;
+        m_Renderer.material.color = ColorLibrary.Instance.GetMaterial(m_CurrentColor).color;
     }
 }

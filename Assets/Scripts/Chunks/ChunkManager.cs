@@ -12,7 +12,7 @@ public class ChunkManager : MonoBehaviour
     private float m_ChunkSize = 60f;
     private int m_SpawnedChunkIndex = 0;
 
-    [SerializeField] private Chunk m_CurrentChunk;
+    private Chunk m_CurrentChunk;
     private List<Chunk> m_VisibleChunks = new List<Chunk>();
 
     private List<Chunk> m_ChunkPool = new List<Chunk>();
@@ -43,6 +43,7 @@ public class ChunkManager : MonoBehaviour
             SpawnRandomChunk();
         }
         m_CurrentChunk = m_VisibleChunks[1];
+        m_CurrentChunk.ShowAdditives();
         GameEvents.OnTargetColorCombinationUpdated(m_CurrentChunk.ColorCombination);
     }
 

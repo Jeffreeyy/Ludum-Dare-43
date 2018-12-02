@@ -14,10 +14,12 @@ public class Chunk : MonoBehaviour
     [Range(0, 100)]
     [SerializeField] private float m_Percentage = 70f;
     [SerializeField] private float m_MinimumSpacingBetweenPickups = 2f;
+    [Space]
+    [SerializeField] private List<ChunkAdditive> m_Additives;
 
     public bool InUse { get; set; }
 
-    public ColorCombination ColorCombination;
+    public ColorCombination ColorCombination { get; set; }
 
     private const string PICKUP_IDENTIFIER = "Pickups";
 
@@ -142,5 +144,13 @@ public class Chunk : MonoBehaviour
 
         if (spawnAmount > 0)
             SpawnOtherPickups(combination, spawnAmount, colorsToSpawn, pickupHolder);
+    }
+
+    public void ShowAdditives()
+    {
+        if (m_Additives.Count <= 0) return;
+
+        for (int i = 0; i < m_Additives.Count; i++)
+            m_Additives[i].Show();
     }
 }

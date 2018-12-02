@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    private int m_Score;
+    public int Score { get { return m_Score; } set { m_Score = value; if (GameEvents.OnScoreUpdated != null) GameEvents.OnScoreUpdated(m_Score); } }
+
     private void Awake()
     {
         if (Instance == null)
@@ -18,8 +21,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         ChunkManager.Instance.PreloadChunks();
-
-        StartGame();
     }
 
     public void StartGame()
@@ -30,4 +31,10 @@ public class GameManager : MonoBehaviour
         
         GameEvents.OnTargetColorCombinationUpdated(firstChunk.ColorCombination);
     }
+
+    public void EndGame()
+    {
+        if (GameEvents.OnGameOver != null) GameEvents.OnGameOver(m_Score);
+    }
+    
 }
