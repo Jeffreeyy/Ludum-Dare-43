@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ColorObjective : MonoBehaviour, ICollidable
 {
@@ -28,7 +26,7 @@ public class ColorObjective : MonoBehaviour, ICollidable
 
     private void UpdateColor()
     {
-        m_Renderer.material = m_Data.material;
+        m_Renderer.material.color = m_Data.material.color;
     }
 
     public void OnHit()
