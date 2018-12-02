@@ -13,8 +13,13 @@ public class Tile : MonoBehaviour
     [SerializeField] private TilePropSpawner m_GrassSpawner;
     [SerializeField] private TilePropSpawner m_SticksSpawner;
 
-	// Use this for initialization
-	void Start ()
+    private BoxCollider m_Collider;
+    private MapBound m_MapBound;
+
+    private List<ColorPickup> m_Pickups = new List<ColorPickup>();
+    public List<ColorPickup> Pickups { get { return m_Pickups; } set { m_Pickups = value; } }
+
+    public void Generate()
     {
         if (m_Trees)
             m_TreeSpawner.Spawn();
@@ -29,16 +34,39 @@ public class Tile : MonoBehaviour
             CreateBound();
     }
 
+    public void Clear()
+    {
+        m_TreeSpawner.Clear();
+        m_GrassSpawner.Clear();
+        m_SticksSpawner.Clear();
+
+        RemoveBound();
+    }
+
     private void CreateBound()
     {
-        BoxCollider collider = GetComponent<BoxCollider>();
-        if (collider == null)
-            collider = gameObject.AddComponent<BoxCollider>();
+        m_Collider = GetComponent<BoxCollider>();
+        if (m_Collider == null)
+            m_Collider = gameObject.AddComponent<BoxCollider>();
 
-        collider.isTrigger = true;
-        collider.center = new Vector3(0, 5, 0);
-        collider.size = new Vector3(10, 10, 10f);
+        m_Collider.isTrigger = true;
+        m_Collider.center = new Vector3(0, 5, 0);
+        m_Collider.size = new Vector3(10, 10, 10f);
 
-        gameObject.AddComponent<MapBound>();
+        if(m_MapBound == null)
+            m_MapBound = gameObject.AddComponent<MapBound>();
+    }
+
+    private void RemoveBound()
+    {
+        if (m_MapBound != null)
+            DestroyImmediate(m_MapBound);
+
+        m_MapBound = null;
+
+        if (m_Collider != null)
+            DestroyImmediate(m_Collider);
+
+        m_Collider = null;
     }
 }

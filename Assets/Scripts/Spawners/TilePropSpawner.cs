@@ -18,6 +18,8 @@ public class TilePropSpawner : MonoBehaviour
 
     public void Spawn()
     {
+        Clear();
+
         int amount = Random.Range(m_MinSpawnAmount, m_MaxSpawnAmount + 1);
         for (int i = 0; i < amount; i++)
         {
@@ -27,8 +29,20 @@ public class TilePropSpawner : MonoBehaviour
             prop.transform.localScale = new Vector3(Random.Range(m_MinScale.x, m_MaxScale.x), Random.Range(m_MinScale.y, m_MaxScale.y), Random.Range(m_MinScale.z, m_MaxScale.z));
             if (m_RandomRotation)
                 prop.transform.localRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
             m_SpawnedProps.Add(prop);
         }
+    }
+
+    public void Clear()
+    {
+        if(transform.childCount > 0)
+        {
+            for (int i = transform.childCount - 1; i >= 0; i--)
+                DestroyImmediate(transform.GetChild(i).gameObject);
+        }
+
+        m_SpawnedProps.Clear();
     }
 
     private Vector3 GetRandomSpawnPosition()
