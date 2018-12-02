@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33654434030609820}
   - component: {fileID: 23309999779116570}
   m_Layer: 0
-  m_Name: Stick3
+  m_Name: stick3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
