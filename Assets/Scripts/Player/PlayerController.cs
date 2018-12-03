@@ -12,8 +12,10 @@ public class PlayerController : MonoBehaviour
 
     private Colors m_CurrentColor = Colors.White;
     [SerializeField] private Renderer m_Renderer;
+    [SerializeField] private Animator m_Animator;
     private int m_Score;
 
+    private bool m_CanControlCharacter;
     private float m_ToggleCooldown;
 
     private void Awake()
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour
         RotateCharacter(false);
 
         GameEvents.OnGameStart += OnGameStart;
+        GameEvents.OnResetGame += OnReset;
         GameEvents.OnMapBoundHit += OnMapBoundHit;
 
         StartCoroutine(RandomBirdSpawning());
@@ -30,13 +33,30 @@ public class PlayerController : MonoBehaviour
     private void OnDestroy()
     {
         GameEvents.OnGameStart -= OnGameStart;
+        GameEvents.OnResetGame -= OnReset;
         GameEvents.OnMapBoundHit -= OnMapBoundHit;
 
         StopCoroutine(RandomBirdSpawning());
     }
 
+    private void OnReset()
+    {
+        SetMoving(false);
+        m_CanControlCharacter = false;
+        m_MovementSpeed = 0;
+        transform.position = new Vector3(0, 0, -60f);
+        m_CurrentColor = Colors.White;
+        SetMaterialColor(Color.white, false);
+
+        m_Direction = Vector3.left;
+        transform.localScale = Vector3.one;
+        transform.localRotation = Quaternion.Euler(0, GetPlayerRotation(), 0);
+    }
+
     private void OnGameStart()
     {
+        SetMoving(true);
+        m_CanControlCharacter = true;
         m_MovementSpeed = m_BaseMovementSpeed;
     }
 
@@ -46,17 +66,25 @@ public class PlayerController : MonoBehaviour
         m_ToggleCooldown = 0.2f;
     }
 
+    private void SetMoving(bool moving)
+    {
+        m_Animator.SetBool("Moving", moving);
+    }
+
     void Update()
     {
-        if (m_ToggleCooldown > 0)
-            m_ToggleCooldown -= Time.deltaTime;
+        if(m_CanControlCharacter)
+        {
+            if (m_ToggleCooldown > 0)
+                m_ToggleCooldown -= Time.deltaTime;
 
-        // Toggle direction
-        if (Input.GetKeyDown(KeyCode.Space))
-            ToggleDirection();
+            // Toggle direction
+            if (Input.GetKeyDown(KeyCode.Space))
+                ToggleDirection();
 
-        // Move player
-        transform.position += new Vector3(m_Direction.x * m_MovementSpeed * Time.deltaTime, 0, m_MovementSpeed * Time.deltaTime);
+            // Move player
+            transform.position += new Vector3(m_Direction.x * m_MovementSpeed * Time.deltaTime, 0, m_MovementSpeed * Time.deltaTime);
+        }
     }
 
     private void ToggleDirection()
@@ -70,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
     private void RotateCharacter(bool animated)
     {
-        float rotation = m_Direction == Vector3.left ? -45f : 45f;
+        float rotation = GetPlayerRotation();
         transform.DOKill(false);
         if (animated)
         {
@@ -89,6 +117,11 @@ public class PlayerController : MonoBehaviour
         transform.DOLocalRotate(new Vector3(0f, rotation, 0f), animated ? 0.2f : 0);
     }
 
+    private float GetPlayerRotation()
+    {
+        return m_Direction == Vector3.left ? -45f : 45f;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         ICollidable collidable = other.gameObject.GetComponent<ICollidable>();
@@ -105,6 +138,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandlePickupHit(ICollidable collidable)
     {
+        if (collidable.BeenHit) return;
+
         if (m_CurrentColor == collidable.Color) return;
 
         Colors newColor = m_CurrentColor == Colors.White ? collidable.Color : ColorCombinations.GetCombinedColor(m_CurrentColor, collidable.Color);
@@ -136,10 +171,26 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            m_MovementSpeed = 0;
-            if(GameEvents.OnGameOver != null) GameEvents.OnGameOver(m_Score);
+            // Handle game over
+            HandleGameOver();
         }
+    }
 
+    private void HandleGameOver()
+    {
+        m_CanControlCharacter = false;
+        m_MovementSpeed = 0;
+        SetMoving(false);
+        SplatCharacterAgainstObjective();
+        if (GameEvents.OnGameOver != null) GameEvents.OnGameOver(m_Score);
+    }
+    
+    private void SplatCharacterAgainstObjective()
+    {
+        transform.DOKill();
+        transform.DOLocalRotate(Vector3.zero, 0.1f);
+        transform.DOScaleZ(0.2f, 0.1f);
+        transform.DOMove(new Vector3(transform.position.x + (m_Direction == Vector3.left ? -0.5f : 0.5f), 0, transform.position.z + 0.7f), 0.1f);
     }
 
     private void ResetColor()

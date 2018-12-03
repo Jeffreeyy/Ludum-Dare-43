@@ -15,6 +15,7 @@ public class ColorPickup : MonoBehaviour, ICollidable
 
     public CollidableType Type { get; set; }
     public Colors Color { get { return m_Data.color; } }
+    public bool BeenHit { get; set; }
 
     private void AnimateIdle()
     {
@@ -53,6 +54,7 @@ public class ColorPickup : MonoBehaviour, ICollidable
     {
         m_Data = data;
         Type = type;
+        BeenHit = false;
 
         UpdateColor();
         SetDefaultObjectValues();
@@ -66,6 +68,7 @@ public class ColorPickup : MonoBehaviour, ICollidable
 
     public void OnHit()
     {
+        BeenHit = true;
         m_ToColor.transform.DOScale(0, 0.33f);
     }
 }

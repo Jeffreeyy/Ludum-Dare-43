@@ -72,8 +72,10 @@ public class Chunk : MonoBehaviour
 
     public void ClearPickups()
     {
-        for (int i = 0; i < m_SpawnedPickups.Count; i++)
+        for (int i = m_SpawnedPickups.Count - 1; i >= 0; i--)
             m_PickupPool.Despawn(m_SpawnedPickups[i].gameObject);
+
+        m_SpawnedPickups.Clear();
     }
 
     private ColorPickup CreatePickup(ColorItem data, CollidableType type, Transform parent)

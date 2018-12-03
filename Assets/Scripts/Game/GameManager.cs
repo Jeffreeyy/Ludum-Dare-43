@@ -20,20 +20,38 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Pre load all the chunks, gets done once
         ChunkManager.Instance.PreloadChunks();
+
+        StartCoroutine(Intro());
+    }
+
+    private IEnumerator Intro()
+    {
+        Logo.Instance.Show(0.5f);
+        yield return new WaitForSeconds(1f);
+        Fader.Instance.FadeOut(1f);
+    }
+
+    private IEnumerator Restart()
+    {
+        Logo.Instance.Show(0.5f);
+        Fader.Instance.FadeIn(0.5f);
+        yield return new WaitForSeconds(0.5f);
+        if (GameEvents.OnResetGame != null) GameEvents.OnResetGame();
+        yield return new WaitForSeconds(0.5f);
+        Fader.Instance.FadeOut(0.5f);
     }
 
     public void StartGame()
     {
         if (GameEvents.OnGameStart != null) GameEvents.OnGameStart();
-
-        Chunk firstChunk = ChunkManager.Instance.GetCurrentChunk();
-        
-        GameEvents.OnTargetColorCombinationUpdated(firstChunk.ColorCombination);
+        Logo.Instance.Hide(0.5f);
     }
 
-    public void EndGame()
+    public void RestartGame()
     {
-        if (GameEvents.OnGameOver != null) GameEvents.OnGameOver(m_Score);
+        Score = 0;
+        StartCoroutine(Restart());
     }
 }
